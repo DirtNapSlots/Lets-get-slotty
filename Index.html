@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Neon Cluster 6×6</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🌀</div>
+        <div>
+          <div class="title">NEON CLUSTER</div>
+          <div class="sub">6×6 · Cascades · GitHub Pages</div>
+        </div>
+      </div>
+
+      <div class="hud">
+        <div class="hudItem">
+          <div class="k">BAL</div>
+          <div class="v" id="bal">$1,000</div>
+        </div>
+        <div class="hudItem">
+          <div class="k">BET</div>
+          <div class="v" id="bet">$10</div>
+        </div>
+        <div class="hudItem">
+          <div class="k">WIN</div>
+          <div class="v" id="win">$0</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="machine">
+        <div class="glass">
+          <div class="grid" id="grid" aria-label="6x6 slot grid"></div>
+          <div class="shine"></div>
+        </div>
+
+        <div class="info">
+          <div class="pill">Win with clusters of 6+ · Wild = 🃏</div>
+          <div class="pay">
+            <div class="row"><span>💎</span><span>High</span><span id="p_diamond">x20 (6) → x120 (12+)</span></div>
+            <div class="row"><span>🔥</span><span>Mid</span><span id="p_fire">x10 (6) → x60 (12+)</span></div>
+            <div class="row"><span>⭐</span><span>Mid</span><span id="p_star">x8 (6) → x48 (12+)</span></div>
+            <div class="row"><span>🍒</span><span>Low</span><span id="p_cherry">x5 (6) → x30 (12+)</span></div>
+            <div class="row"><span>🍋</span><span>Low</span><span id="p_lemon">x4 (6) → x24 (12+)</span></div>
+            <div class="row"><span>🟩</span><span>Low</span><span id="p_green">x3 (6) → x18 (12+)</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls">
+        <div class="row">
+          <button class="btn ghost" id="betDown">– BET</button>
+          <button class="btn ghost" id="betUp">+ BET</button>
+          <button class="btn ghost" id="reset">RESET</button>
+        </div>
+
+        <button class="btn spin" id="spin">
+          <span class="big">SPIN</span>
+          <span class="small">clusters + cascades</span>
+        </button>
+
+        <div class="msg" id="msg">Ready.</div>
+      </section>
+    </main>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
