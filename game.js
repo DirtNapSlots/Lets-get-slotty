@@ -60,7 +60,15 @@ function save(){
 }
 
 function setMsg(t){ msgEl.textContent = t; }
+function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
 
+function shakeGlass(){
+  const glass = document.querySelector(".glass");
+  if(!glass) return;
+  glass.classList.remove("shake");
+  void glass.offsetWidth;      // retrigger animation
+  glass.classList.add("shake");
+}
 function syncHUD(win){
   balEl.textContent = fmt(state.balance);
   betEl.textContent = fmt(state.bet);
@@ -269,7 +277,8 @@ async function runCascades(){
       cascadeWin += pay;
       removed.push(...w.cells);
     }
-
+if (cascadeWin >= state.bet * 3) { shakeGlass(); shakeGlass(); }
+else if (cascadeWin > 0) { shakeGlass(); }
     totalWin += cascadeWin;
     setMsg(`Cascade ${cascade} • +${fmt(cascadeWin)} (${wins.length} cluster${wins.length>1?"s":""})`);
     syncHUD(totalWin);
