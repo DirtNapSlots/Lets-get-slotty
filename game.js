@@ -107,7 +107,7 @@ function renderBoard(b){
       div.className = "cell";
       div.dataset.r = r;
       div.dataset.c = c;
-      div.textContent = symEmoji(b[r][c]);
+      div.innerHTML = symSVG(b[r][c]);
       gridEl.appendChild(div);
     }
   }
