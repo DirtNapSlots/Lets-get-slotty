@@ -113,8 +113,174 @@ function renderBoard(b){
   }
 }
 
-function symEmoji(id){
-  return SYMS.find(s=>s.id===id)?.e || "❔";
+let __svgUid = 0;
+function uid(prefix="fx"){ __svgUid++; return `${prefix}_${__svgUid}`; }
+
+// Chaos Bunny Unhinged SVG symbol set.
+// We keep your existing IDs (DIAMOND/FIRE/etc.) so payouts & logic stay unchanged.
+function symSVG(id){
+  const fx = uid("g");
+  const glow = (color) => `
+    <defs>
+      <filter id="${fx}" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3.5" result="b"/>
+        <feColorMatrix in="b" type="matrix"
+          values="1 0 0 0 0
+                  0 1 0 0 0
+                  0 0 1 0 0
+                  0 0 0 0.9 0" result="g"/>
+        <feMerge>
+          <feMergeNode in="g"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    <g filter="url(#${fx})" stroke="${color}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></g>
+  `;
+
+  // Helper: wrap with a soft inner plate so symbols feel “cabinet-grade”
+  const wrap = (inner, accent="#ff4bd6") => `
+    <svg viewBox="0 0 100 100" role="img" aria-label="${id}">
+      <defs>
+        <radialGradient id="${fx}_bg" cx="35%" cy="28%" r="75%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.16)"/>
+          <stop offset="60%" stop-color="rgba(255,255,255,0.05)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0.10)"/>
+        </radialGradient>
+        <filter id="${fx}_soft" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2.2" result="b"/>
+          <feMerge>
+            <feMergeNode in="b"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- subtle plate -->
+      <circle cx="50" cy="50" r="40" fill="url(#${fx}_bg)" stroke="rgba(255,255,255,0.14)" stroke-width="2"/>
+      <circle cx="50" cy="50" r="41" fill="none" stroke="${accent}" stroke-width="2" opacity="0.28"/>
+
+      ${inner}
+    </svg>
+  `;
+
+  // Symbol drawings (Chaos Bunny Unhinged)
+  switch(id){
+
+    // DIAMOND = "Neon Crown Gem"
+    case "DIAMOND": {
+      const inner = `
+        <g filter="url(#${fx}_soft)">
+          <path d="M25 58 L38 40 L50 58 L62 40 L75 58 L50 78 Z"
+                fill="rgba(255,211,122,0.18)" stroke="rgba(255,211,122,0.95)" stroke-width="4" />
+          <path d="M38 40 L50 28 L62 40" fill="none"
+                stroke="rgba(255,211,122,0.95)" stroke-width="4" />
+          <circle cx="50" cy="26" r="5" fill="rgba(255,211,122,0.85)" />
+          <path d="M33 56 L50 74 L67 56" fill="none" stroke="rgba(124,246,255,0.55)" stroke-width="3" opacity="0.8"/>
+        </g>
+      `;
+      return wrap(inner, "#ffd37a");
+    }
+
+    // FIRE = "Knife Spark"
+    case "FIRE": {
+      const inner = `
+        <g filter="url(#${fx}_soft)">
+          <path d="M30 72 L72 30" stroke="rgba(124,246,255,0.95)" stroke-width="6" />
+          <path d="M68 26 L78 22 L74 32 Z" fill="rgba(124,246,255,0.85)" opacity="0.9"/>
+          <path d="M26 68 L22 78 L32 74 Z" fill="rgba(255,75,214,0.85)" opacity="0.85"/>
+          <path d="M52 24 L58 18" stroke="rgba(255,255,255,0.65)" stroke-width="3"/>
+          <path d="M24 52 L18 58" stroke="rgba(255,255,255,0.55)" stroke-width="3"/>
+        </g>
+      `;
+      return wrap(inner, "#7cf6ff");
+    }
+
+    // STAR = "Glitch Star"
+    case "STAR": {
+      const inner = `
+        <g filter="url(#${fx}_soft)">
+          <path d="M50 22 L58 42 L80 44 L62 57 L68 78 L50 66 L32 78 L38 57 L20 44 L42 42 Z"
+                fill="rgba(183,255,90,0.16)" stroke="rgba(183,255,90,0.95)" stroke-width="4"/>
+          <path d="M30 34 L70 34" stroke="rgba(255,75,214,0.55)" stroke-width="3" opacity="0.9"/>
+          <path d="M28 62 L72 62" stroke="rgba(124,246,255,0.45)" stroke-width="3" opacity="0.8"/>
+        </g>
+      `;
+      return wrap(inner, "#b7ff5a");
+    }
+
+    // CHERRY = "Bunny Paw"
+    case "CHERRY": {
+      const inner = `
+        <g filter="url(#${fx}_soft)">
+          <circle cx="50" cy="56" r="18" fill="rgba(255,75,214,0.16)" stroke="rgba(255,75,214,0.95)" stroke-width="4"/>
+          <circle cx="38" cy="40" r="6" fill="rgba(255,75,214,0.28)" stroke="rgba(255,75,214,0.9)" stroke-width="3"/>
+          <circle cx="50" cy="36" r="6" fill="rgba(255,75,214,0.28)" stroke="rgba(255,75,214,0.9)" stroke-width="3"/>
+          <circle cx="62" cy="40" r="6" fill="rgba(255,75,214,0.28)" stroke="rgba(255,75,214,0.9)" stroke-width="3"/>
+          <path d="M43 58 Q50 66 57 58" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="3" opacity="0.7"/>
+        </g>
+      `;
+      return wrap(inner, "#ff4bd6");
+    }
+
+    // LEMON = "Carrot Shard"
+    case "LEMON": {
+      const inner = `
+        <g filter="url(#${fx}_soft)">
+          <path d="M50 22 C62 30 70 44 64 62 C60 74 50 82 42 78 C34 74 30 58 36 42 C40 32 46 26 50 22 Z"
+                fill="rgba(255,211,122,0.14)" stroke="rgba(255,211,122,0.95)" stroke-width="4"/>
+          <path d="M48 20 C40 16 32 18 26 24" stroke="rgba(183,255,90,0.95)" stroke-width="4"/>
+          <path d="M42 18 L36 12" stroke="rgba(183,255,90,0.65)" stroke-width="3"/>
+          <path d="M55 38 L45 62" stroke="rgba(124,246,255,0.40)" stroke-width="3" opacity="0.7"/>
+        </g>
+      `;
+      return wrap(inner, "#ffd37a");
+    }
+
+    // GREEN = "Neon Chip"
+    case "GREEN": {
+      const inner = `
+        <g filter="url(#${fx}_soft)">
+          <circle cx="50" cy="50" r="24" fill="rgba(124,246,255,0.10)" stroke="rgba(124,246,255,0.95)" stroke-width="4"/>
+          <circle cx="50" cy="50" r="14" fill="rgba(183,255,90,0.10)" stroke="rgba(183,255,90,0.9)" stroke-width="3"/>
+          <path d="M50 26 L50 18" stroke="rgba(255,75,214,0.75)" stroke-width="4"/>
+          <path d="M74 50 L82 50" stroke="rgba(255,75,214,0.75)" stroke-width="4"/>
+          <path d="M50 74 L50 82" stroke="rgba(255,75,214,0.75)" stroke-width="4"/>
+          <path d="M26 50 L18 50" stroke="rgba(255,75,214,0.75)" stroke-width="4"/>
+        </g>
+      `;
+      return wrap(inner, "#7cf6ff");
+    }
+
+    // WILD = "Chaos Bunny Head"
+    case "WILD": {
+      const inner = `
+        <g filter="url(#${fx}_soft)">
+          <!-- ears -->
+          <path d="M34 24 C28 10 40 8 44 20" fill="rgba(255,75,214,0.12)" stroke="rgba(255,75,214,0.95)" stroke-width="4"/>
+          <path d="M66 24 C72 10 60 8 56 20" fill="rgba(255,75,214,0.12)" stroke="rgba(255,75,214,0.95)" stroke-width="4"/>
+
+          <!-- head -->
+          <circle cx="50" cy="54" r="22" fill="rgba(124,246,255,0.10)" stroke="rgba(124,246,255,0.95)" stroke-width="4"/>
+
+          <!-- eyes (unhinged) -->
+          <circle cx="42" cy="52" r="4" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="58" cy="52" r="4" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="42" cy="52" r="1.8" fill="rgba(255,75,214,0.95)"/>
+          <circle cx="58" cy="52" r="1.8" fill="rgba(255,75,214,0.95)"/>
+
+          <!-- grin -->
+          <path d="M42 62 Q50 70 58 62" fill="none" stroke="rgba(183,255,90,0.95)" stroke-width="4"/>
+          <path d="M46 66 L46 72" stroke="rgba(183,255,90,0.8)" stroke-width="3"/>
+          <path d="M54 66 L54 72" stroke="rgba(183,255,90,0.8)" stroke-width="3"/>
+        </g>
+      `;
+      return wrap(inner, "#ff4bd6");
+    }
+
+    default:
+      return `<svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" font-size="36">?</text></svg>`;
+  }
 }
 
 function clearHighlights(){
